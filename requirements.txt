@@ -1,4 +1,6 @@
 langgraph
 ollama
 pydantic
-pre-commit
+pyyaml
+langchain-community
+duckduckgo-search

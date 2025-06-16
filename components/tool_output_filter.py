@@ -1,6 +1,11 @@
-from models.data_models import ToolOutput
+from components.base_component import BaseComponent
+from models.data_models import ToolOutput, AgentState
 
 
-class OutputFilter:
+class OutputFilter(BaseComponent):
+    def __call__(self, state: AgentState):
+        filtered_outputs = self.filter_outputs(state["tool_outputs"])
+        state["tool_outputs"] = filtered_outputs
+
     def filter_outputs(self, outputs: list[ToolOutput]) -> list[ToolOutput]:
-        return [output for output in outputs if "error" not in output.result.lower()]
+        return outputs

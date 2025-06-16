@@ -1,51 +1,34 @@
 from langgraph.graph import StateGraph
 from langgraph.graph.state import CompiledStateGraph
 
-from models.data_models import Query
-from llm.ollama_llm import OllamaLLM
-from components import (
-    query_rephraser,
-    planner,
-    tool_selector,
-    tool_executor,
-    tool_output_filter,
-    response_generator,
-)
+from components.llm_components.response_generator import ResponseGenerator
+from components.tool_output_filter import OutputFilter
+from components.web_search import WebSearch
+from models.data_models import AgentState
 
 
 def build_graph() -> CompiledStateGraph:
-    llm = OllamaLLM()
+    web_search = WebSearch()
+    results_filter = OutputFilter()
+    generator = ResponseGenerator()
 
-    rephraser = query_rephraser.QueryRephraser(llm)
-    answer_planner = planner.Planner(llm)
-    selector = tool_selector.ToolSelector()
-    executor = tool_executor.ToolExecutor()
-    filterer = tool_output_filter.OutputFilter()
-    generator = response_generator.ResponseGenerator(llm)
+    graph = StateGraph(AgentState)
 
-    graph = StateGraph()
+    graph.add_node("retrieve", web_search)
+    graph.add_node("results_filter", results_filter)
+    graph.add_node("respond", generator)
 
-    graph.add_node("rephrase", rephraser.rephrase)
-    graph.add_node("plan", answer_planner.create_plan)
-    graph.add_node("select", selector.select_tools)
-    graph.add_node("execute", executor.execute)
-    graph.add_node("filter", filterer.filter_outputs)
-    graph.add_node("respond", generator.generate_response)
+    graph.set_entry_point("retrieve")
 
-    graph.set_entry_point("rephrase")
-    graph.add_edge("rephrase", "plan")
-    graph.add_edge("plan", "select")
-    graph.add_edge("select", "execute")
-    graph.add_edge("execute", "filter")
-    graph.add_edge("filter", "respond")
+    graph.add_edge("retrieve", "results_filter")
+    graph.add_edge("results_filter", "respond")
 
     graph.set_finish_point("respond")
 
     return graph.compile()
 
 
-def run_pipeline(query_str: str):
-    query = Query(content=query_str)
+def run_pipeline(query: str) -> AgentState:
     graph = build_graph()
-    result = graph.invoke({"input": query})
+    result = graph.invoke(AgentState(query=query, tool_outputs=[], answers=[]))
     return result

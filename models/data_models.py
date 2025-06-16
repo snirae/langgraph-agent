@@ -1,11 +1,20 @@
+from typing import TypedDict
+
 from pydantic import BaseModel
 
 
-class Query(BaseModel):
-    content: str
-
-class Plan(BaseModel):
-    steps: list[str]
-
 class ToolOutput(BaseModel):
-    result: str
+    tool_name: str
+    result: list[str]
+
+
+class SettingsPrompts(BaseModel):
+    system: str = ""
+    task: str = ""
+    style: str = ""
+
+
+class AgentState(TypedDict):
+    query: str
+    tool_outputs: list[ToolOutput]
+    answers: list[str]

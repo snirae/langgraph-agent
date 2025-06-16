@@ -13,18 +13,21 @@ class Model(StrEnum):
 class OllamaLLM:
     def __init__(self, model: Model = Model.GEMMA3_1B):
         self.client = Client()
-        self.model = model.value
+        self.model = str(model.value)
 
     def generate(
-            self,
-            messages: list[dict[str, str]]
+        self,
+        messages: list[dict[str, str]],
+        output_structure: dict = None,
     ) -> str:
-        response = self.client.chat(model=self.model, messages=messages)
-        return response['message']['content']
+        response = self.client.chat(
+            model=self.model, messages=messages, format=output_structure
+        )
+        return response["message"]["content"]
 
     def generate_stream(
-            self,
-            messages: list[dict[str, str]],
+        self,
+        messages: list[dict[str, str]],
     ) -> Generator:
         response = self.client.chat(model=self.model, messages=messages, stream=True)
         for chunk in response:
