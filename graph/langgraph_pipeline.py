@@ -29,6 +29,11 @@ def build_graph() -> CompiledStateGraph:
 
 
 def run_pipeline(query: str) -> AgentState:
+    empty_state = AgentState(
+        query=query,
+        tool_outputs=[],
+        answer="",
+    )
     graph = build_graph()
-    result = graph.invoke(AgentState(query=query, tool_outputs=[], answers=[]))
+    result = graph.invoke(empty_state)
     return result

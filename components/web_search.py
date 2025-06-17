@@ -8,13 +8,13 @@ class WebSearch(BaseComponent):
     def __init__(self):
         self.search = DuckDuckGoSearchRun()
 
-    def __call__(self, state: AgentState):
+    def __call__(self, state: AgentState) -> dict[str, list[ToolOutput]]:
         search_result = self.search_documents(state["query"])
         output = ToolOutput(
             tool_name="web_search",
             result=[search_result],
         )
-        state["tool_outputs"].append(output)
+        return {"tool_outputs": [output]}
 
     def search_documents(self, query: str) -> str:
         return self.search.invoke(query)

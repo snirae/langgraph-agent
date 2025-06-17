@@ -17,4 +17,4 @@ class SettingsPrompts(BaseModel):
 class AgentState(TypedDict):
     query: str
     tool_outputs: list[ToolOutput]
-    answers: list[str]
+    answer: str

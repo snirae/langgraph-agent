@@ -9,11 +9,11 @@ class ResponseGenerator(BaseLLMComponent):
     def __init__(self, model: Model = Model.GEMMA3_1B):
         super().__init__(model, stage="generation")
 
-    def __call__(self, state: AgentState):
+    def __call__(self, state: AgentState) -> dict[str, str]:
         query = state["query"]
         tool_outputs = state["tool_outputs"]
         response = self.generate_response(query, tool_outputs)
-        state["answers"].append(response)
+        return {"answer": response}
 
     def generate_response(
         self,

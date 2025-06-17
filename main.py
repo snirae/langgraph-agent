@@ -4,4 +4,4 @@ if __name__ == "__main__":
     while True:
         user_query = input("Enter your query: ")
         response = run_pipeline(user_query)
-        print("\nFinal Answer:\n", response["answers"][0])
+        print("\nFinal Answer:\n", response["answer"])
