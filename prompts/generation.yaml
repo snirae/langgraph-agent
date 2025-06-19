@@ -1,5 +1,6 @@
 task:
-  ""
+  "Write an answer to the given query based on the given context, or abstain when the answer can not be inferred from the context.
+  Answer the question in the language you were asked."
 
 style:
   ""

@@ -6,7 +6,7 @@ def format_tool_outputs(
 ) -> str:
     result = "Context retrieved using tools:\n<results>"
     for tool_output in tool_outputs:
-        result += "\n".join(tool_output.result)
+        result += "\n".join(tool_output.results)
     result += "</results>"
 
     return result

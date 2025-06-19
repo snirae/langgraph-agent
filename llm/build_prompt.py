@@ -8,7 +8,7 @@ def build_prompt(
     system_prompt = (
         f"{settings_prompts.system}\n"
         f"Task Details:\n{settings_prompts.task}\n"
-        f"Style Constraints:\n{settings_prompts.style}\n"
+        f"Style Constraints:\n{settings_prompts.style if settings_prompts.style != '' else None}\n"
     )
     messages = [
         {

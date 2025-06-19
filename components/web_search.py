@@ -12,7 +12,7 @@ class WebSearch(BaseComponent):
         search_result = self.search_documents(state["query"])
         output = ToolOutput(
             tool_name="web_search",
-            result=[search_result],
+            results=[search_result],
         )
         return {"tool_outputs": [output]}
 

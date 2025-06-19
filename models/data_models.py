@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class ToolOutput(BaseModel):
     tool_name: str
-    result: list[str]
+    results: list[str]
 
 
 class SettingsPrompts(BaseModel):

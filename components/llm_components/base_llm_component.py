@@ -1,5 +1,4 @@
 from abc import ABC
-from typing import Literal
 
 from components.base_component import BaseComponent
 from llm.get_settings_prompts import get_settings_prompts
@@ -10,7 +9,7 @@ class BaseLLMComponent(BaseComponent, ABC):
     def __init__(
         self,
         model: Model,
-        stage: Literal["query_rephrasing", "planning", "tool_selection", "generation"],
+        stage: str,
     ):
         self.llm = OllamaLLM(model)
         self.stage = stage

@@ -1,0 +1,25 @@
+task: >
+  You are an expert LLM evaluator that excels at evaluating a QUESTION and REFERENCES.
+  Consider the following criteria:
+  Sufficient Context: 1 IF the CONTEXT is sufficient to infer the answer to the question and 0
+  IF the CONTEXT cannot be used to infer the answer to the question
+  ONLY USE 1 OR 0!
+
+  EXAMPLE:
+  ### QUESTION
+  In which year did the publisher of Roald Dahl’s Guide to Railway Safety cease to exist?
+  ### References
+  Roald Dahl’s Guide to Railway Safety was published in 1991 by the British Railways Board.
+  The British Railways Board had asked Roald Dahl to write the text of the booklet, and
+  Quentin Blake to illustrate it, to help young people enjoy using the railways safely. The
+  British Railways Board (BRB) was a nationalised industry in the United Kingdom that
+  operated from 1963 to 2001. Until 1997 it was responsible for most railway services in Great
+  Britain, trading under the brand name British Railways and, from 1965, British Rail. It
+  did not operate railways in Northern Ireland, where railways were the responsibility of the
+  Government of Northern Ireland.
+
+  For this input, your answer would be:
+  1
+
+style:
+  ""

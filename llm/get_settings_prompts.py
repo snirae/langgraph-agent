@@ -1,12 +1,10 @@
-from typing import Literal
-
 import yaml
 from pathlib import Path
 
 from models.data_models import SettingsPrompts
 
 
-def get_settings_prompts(stage: Literal["generation"]) -> SettingsPrompts:
+def get_settings_prompts(stage: str) -> SettingsPrompts:
     prompts_path = Path(__file__).parent.parent / "prompts"
     common_prompts_path = prompts_path / "common.yaml"
     stage_prompts_path = prompts_path / f"{stage}.yaml"

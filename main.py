@@ -1,7 +1,12 @@
-from graph.langgraph_pipeline import run_pipeline
+from graph.enhanced_rag_pipeline import EnhancedRAGPipeline
+
 
 if __name__ == "__main__":
-    while True:
+    # pipeline = SimpleRAGPipeline()
+    pipeline = EnhancedRAGPipeline()
+    user_query = input("Enter your query: ")
+    while user_query != "q":
+        response = pipeline.run_pipeline(user_query)
+        print(response["answer"], end=f"\n\n{'#' * 100}\n\n")
+
         user_query = input("Enter your query: ")
-        response = run_pipeline(user_query)
-        print("\nFinal Answer:\n", response["answer"])
