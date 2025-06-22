@@ -1,12 +1,12 @@
-from models.data_models import ToolOutput
+from langchain_core.documents import Document
 
 
 def format_tool_outputs(
-    tool_outputs: list[ToolOutput],
+    context: list[Document],
 ) -> str:
     result = "Context retrieved using tools:\n<results>"
-    for tool_output in tool_outputs:
-        result += "\n".join(tool_output.results)
+    for doc in context:
+        result += "\n".join(doc.page_content)
     result += "</results>"
 
     return result

@@ -1,56 +1,41 @@
 import textwrap
 
+from langchain_core.documents import Document
+
 from components.llm_components.base_llm_component import BaseLLMComponent
 from llm.build_prompt import build_prompt
 from llm.ollama_llm import Model
-from models.data_models import ToolOutput, AgentState
+from models.data_models import AgentState
 
 
 class SufficiencyFilter(BaseLLMComponent):
     def __init__(self, model: Model = Model.GEMMA3_1B):
         super().__init__(model, stage="sufficiency")
 
-    def __call__(self, state: AgentState) -> dict[str, list[ToolOutput]]:
-        filtered_outputs = self.filter_outputs(state["query"], state["tool_outputs"])
-        return {"tool_outputs": filtered_outputs}
+    def __call__(self, state: AgentState) -> dict[str, list[Document]]:
+        filtered_context = self.filter_context(state["query"], state["context"])
+        return {"context": filtered_context}
 
-    def filter_outputs(
-        self, query: str, tool_outputs: list[ToolOutput]
-    ) -> list[ToolOutput]:
+    def filter_context(self, query: str, context: list[Document]) -> list[Document]:
         sufficiency_classifications = []
-        for output in tool_outputs:
-            current_classifications = []
-            for result in output.results:
-                user_message = textwrap.dedent(
-                    f"""
-                        ### QUESTION
-                        {query}
-                        ### REFERENCES
-                        {result}
-                    """
-                )
-                messages = build_prompt(self.settings_prompts, user_message)
-                llm_response = self.llm.generate(messages).strip()
-
-                is_sufficient = True if "1" in llm_response else False
-                current_classifications.append(is_sufficient)
-
-            sufficiency_classifications.append(current_classifications)
-
-        filtered_outputs = []
-        for tool_output, classifications in zip(
-            tool_outputs, sufficiency_classifications
-        ):
-            filtered_from_tool = [
-                result
-                for result, is_sufficient in zip(tool_output.results, classifications)
-                if is_sufficient
-            ]
-            filtered_outputs.append(
-                ToolOutput(
-                    tool_name=tool_output.tool_name,
-                    results=filtered_from_tool,
-                )
+        for doc in context:
+            user_message = textwrap.dedent(
+                f"""
+                    ### QUESTION
+                    {query}
+                    ### REFERENCES
+                    {doc.page_content}
+                """
             )
+            messages = build_prompt(self.settings_prompts, user_message)
+            llm_response = self.llm.generate(messages).strip()
 
-        return filtered_outputs
+            is_sufficient = True if "1" in llm_response else False
+            sufficiency_classifications.append(is_sufficient)
+
+        filtered_context = [
+            doc
+            for doc, is_sufficient in zip(context, sufficiency_classifications)
+            if is_sufficient
+        ]
+        return filtered_context

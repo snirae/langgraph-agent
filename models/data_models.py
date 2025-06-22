@@ -1,11 +1,7 @@
 from typing import TypedDict
 
+from langchain_core.documents import Document
 from pydantic import BaseModel
-
-
-class ToolOutput(BaseModel):
-    tool_name: str
-    results: list[str]
 
 
 class SettingsPrompts(BaseModel):
@@ -16,5 +12,5 @@ class SettingsPrompts(BaseModel):
 
 class AgentState(TypedDict):
     query: str
-    tool_outputs: list[ToolOutput]
+    context: list[Document]
     answer: str

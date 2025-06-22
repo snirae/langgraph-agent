@@ -1,8 +1,8 @@
 from langgraph.graph.state import CompiledStateGraph, StateGraph
 
+from components.google_search import GoogleWebSearch
 from components.llm_components.response_generator import ResponseGenerator
 from components.llm_components.sufficiency_filter import SufficiencyFilter
-from components.web_search import WebSearch
 from graph.base_rag_pipeline import BaseRAGPipeline
 from models.data_models import AgentState
 
@@ -12,13 +12,13 @@ class EnhancedRAGPipeline(BaseRAGPipeline):
     def initial_state(self) -> AgentState:
         initial_state = AgentState(
             query="",
-            tool_outputs=[],
+            context=[],
             answer="",
         )
         return initial_state
 
     def build_graph(self) -> CompiledStateGraph:
-        web_search = WebSearch()
+        web_search = GoogleWebSearch()
         sufficiency_filter = SufficiencyFilter()
         generator = ResponseGenerator()
 

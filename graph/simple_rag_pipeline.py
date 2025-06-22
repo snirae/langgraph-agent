@@ -2,7 +2,7 @@ from langgraph.graph import StateGraph
 from langgraph.graph.state import CompiledStateGraph
 
 from components.llm_components.response_generator import ResponseGenerator
-from components.web_search import WebSearch
+from components.duckduckgo_search import DuckDuckGoWebSearch
 from graph.base_rag_pipeline import BaseRAGPipeline
 from models.data_models import AgentState
 
@@ -12,13 +12,13 @@ class SimpleRAGPipeline(BaseRAGPipeline):
     def initial_state(self) -> AgentState:
         initial_state = AgentState(
             query="",
-            tool_outputs=[],
+            context=[],
             answer="",
         )
         return initial_state
 
     def build_graph(self) -> CompiledStateGraph:
-        web_search = WebSearch()
+        web_search = DuckDuckGoWebSearch()
         generator = ResponseGenerator()
 
         graph = StateGraph(AgentState)

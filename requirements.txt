@@ -3,4 +3,5 @@ ollama
 pydantic
 pyyaml
 langchain-community
+langchain-google-community
 duckduckgo-search
