@@ -1,6 +1,6 @@
 from langgraph.graph.state import CompiledStateGraph, StateGraph
 
-from components.google_search import GoogleWebSearch
+from components.duckduckgo_search import DuckDuckGoWebSearch
 from components.llm_components.response_generator import ResponseGenerator
 from components.llm_components.sufficiency_filter import SufficiencyFilter
 from graph.base_rag_pipeline import BaseRAGPipeline
@@ -18,7 +18,8 @@ class EnhancedRAGPipeline(BaseRAGPipeline):
         return initial_state
 
     def build_graph(self) -> CompiledStateGraph:
-        web_search = GoogleWebSearch()
+        # web_search = GoogleWebSearch()
+        web_search = DuckDuckGoWebSearch()
         sufficiency_filter = SufficiencyFilter()
         generator = ResponseGenerator()
 

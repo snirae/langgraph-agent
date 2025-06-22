@@ -21,7 +21,10 @@ class OllamaLLM:
         output_structure: dict = None,
     ) -> str:
         response = self.client.chat(
-            model=self.model, messages=messages, format=output_structure
+            model=self.model,
+            messages=messages,
+            format=output_structure,
+            options={"temperature": 0},
         )
         return response["message"]["content"]
 
@@ -29,6 +32,11 @@ class OllamaLLM:
         self,
         messages: list[dict[str, str]],
     ) -> Generator:
-        response = self.client.chat(model=self.model, messages=messages, stream=True)
+        response = self.client.chat(
+            model=self.model,
+            messages=messages,
+            stream=True,
+            options={"temperature": 0},
+        )
         for chunk in response:
             yield chunk["message"]["content"]
