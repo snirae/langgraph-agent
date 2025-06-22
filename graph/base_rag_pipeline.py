@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import TypedDict
 
 from langgraph.graph.state import CompiledStateGraph
 
@@ -7,7 +6,8 @@ from models.data_models import AgentState
 
 
 class BaseRAGPipeline(ABC):
-    def __init__(self):
+    def __init__(self, stream_response: bool = False):
+        self.stream_response = stream_response
         self.graph = self.build_graph()
 
     @property
@@ -19,7 +19,7 @@ class BaseRAGPipeline(ABC):
     def build_graph(self) -> CompiledStateGraph:
         pass
 
-    def run_pipeline(self, query: str) -> TypedDict:
+    def run_pipeline(self, query: str) -> AgentState:
         empty_state = self.initial_state
         empty_state["query"] = query
         result = self.graph.invoke(empty_state)

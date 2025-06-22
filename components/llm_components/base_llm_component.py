@@ -10,7 +10,9 @@ class BaseLLMComponent(BaseComponent, ABC):
         self,
         model: Model,
         stage: str,
+        stream_response: bool = False,
     ):
         self.llm = OllamaLLM(model)
         self.stage = stage
         self.settings_prompts = get_settings_prompts(stage)
+        self.stream_response = stream_response

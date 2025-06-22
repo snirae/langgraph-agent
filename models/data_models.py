@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import TypedDict, Generator
 
 from langchain_core.documents import Document
 from pydantic import BaseModel
@@ -13,4 +13,4 @@ class SettingsPrompts(BaseModel):
 class AgentState(TypedDict):
     query: str
     context: list[Document]
-    answer: str
+    answer: str | Generator

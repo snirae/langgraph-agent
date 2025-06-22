@@ -23,7 +23,7 @@ class EnhancedRAGPipeline(BaseRAGPipeline):
         web_search = DuckDuckGoWebSearch()
         sufficiency_filter = SufficiencyFilter()
         context_reorder = ContextReorder()
-        generator = ResponseGenerator()
+        generator = ResponseGenerator(stream_response=self.stream_response)
 
         graph = StateGraph(AgentState)
 
