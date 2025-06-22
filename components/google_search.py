@@ -6,7 +6,8 @@ from models.data_models import AgentState
 
 
 class GoogleWebSearch(BaseComponent):
-    def __init__(self):
+    def __init__(self, top_k: int = 10):
+        self.top_k = top_k
         self.search = GoogleSearchAPIWrapper()
 
     def __call__(self, state: AgentState) -> dict[str, list[Document]]:
@@ -14,6 +15,13 @@ class GoogleWebSearch(BaseComponent):
         return {"context": search_results}
 
     def search_documents(self, query: str) -> list[Document]:
-        result = self.search.run(query)
-        results = [Document(result)]
-        return results
+        results = self.search.results(query, self.top_k)
+        documents = []
+        for result in results:
+            snippet = result.pop("snippet")
+            document = Document(
+                page_content=snippet,
+                metadata=result,
+            )
+            documents.append(document)
+        return documents
